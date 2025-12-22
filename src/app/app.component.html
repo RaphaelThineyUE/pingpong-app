@@ -1,0 +1,150 @@
+<div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+  <!-- Header -->
+  <header class="bg-white shadow-md">
+    <div class="max-w-4xl mx-auto px-4 py-6">
+      <h1 class="text-3xl font-bold text-gray-800">🏓 PingPong Stats Tracker</h1>
+      <p class="text-gray-600 mt-1">Track your ping pong matches easily</p>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-4xl mx-auto px-4 py-8">
+
+    <!-- Match Entry Form -->
+    <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+      <h2 class="text-2xl font-semibold text-gray-800 mb-6">New Match</h2>
+
+      <form (ngSubmit)="submitMatch()" class="space-y-6">
+
+        <!-- Player Selection -->
+        <div class="grid md:grid-cols-2 gap-6">
+
+          <!-- Player 1 -->
+          <div>
+            <label for="player1" class="block text-sm font-medium text-gray-700 mb-2">
+              Player 1
+            </label>
+            <select id="player1" [(ngModel)]="match.player1" name="player1" required
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
+              <option value="">Select Player 1</option>
+              <option *ngFor="let player of players" [value]="player">{{ player }}</option>
+            </select>
+          </div>
+
+          <!-- Player 2 -->
+          <div>
+            <label for="player2" class="block text-sm font-medium text-gray-700 mb-2">
+              Player 2
+            </label>
+            <select id="player2" [(ngModel)]="match.player2" name="player2" required [disabled]="!match.player1"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition disabled:bg-gray-100 disabled:cursor-not-allowed">
+              <option value="">Select Player 2</option>
+              <option *ngFor="let player of availablePlayers2" [value]="player">{{ player }}</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Score Entry -->
+        <div class="grid md:grid-cols-2 gap-6">
+
+          <!-- Score 1 -->
+          <div>
+            <label for="score1" class="block text-sm font-medium text-gray-700 mb-2">
+              {{ match.player1 || 'Player 1' }}'s Score
+            </label>
+            <input id="score1" type="number" [(ngModel)]="match.score1" name="score1" required min="0"
+              placeholder="Enter score"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition text-lg font-semibold">
+          </div>
+
+          <!-- Score 2 -->
+          <div>
+            <label for="score2" class="block text-sm font-medium text-gray-700 mb-2">
+              {{ match.player2 || 'Player 2' }}'s Score
+            </label>
+            <input id="score2" type="number" [(ngModel)]="match.score2" name="score2" required min="0"
+              placeholder="Enter score"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition text-lg font-semibold">
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit"
+          [disabled]="!match.player1 || !match.player2 || match.score1 === null || match.score2 === null"
+          class="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-700 transition disabled:bg-gray-300 disabled:cursor-not-allowed shadow-md hover:shadow-lg">
+          Record Match
+        </button>
+      </form>
+    </div>
+
+    <!-- Recent Matches -->
+    <div class="bg-white rounded-xl shadow-lg p-6" *ngIf="matches.length > 0">
+      <h2 class="text-2xl font-semibold text-gray-800 mb-6">Recent Matches</h2>
+
+      <div class="space-y-4">
+        <div *ngFor="let m of matches; let i = index"
+          class="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition">
+
+          <div class="flex-1">
+            <!-- Date/Time -->
+            <div class="text-xs text-gray-500 mb-2 text-center">
+              {{ m.dateTime }}
+            </div>
+
+            <div class="flex items-center space-x-4">
+              <div class="flex-1 text-right">
+                <span class="font-semibold text-gray-800">{{ m.player1 }}</span>
+              </div>
+              <div class="flex items-center space-x-3">
+                <span class="text-2xl font-bold text-blue-600">{{ m.score1 }}</span>
+                <span class="text-gray-400">-</span>
+                <span class="text-2xl font-bold text-blue-600">{{ m.score2 }}</span>
+              </div>
+              <div class="flex-1">
+                <span class="font-semibold text-gray-800">{{ m.player2 }}</span>
+              </div>
+            </div>
+
+            <!-- Winner badge -->
+            <div class="text-center mt-2">
+              <span *ngIf="m.score1 > m.score2"
+                class="inline-block text-xs font-medium text-green-700 bg-green-100 px-3 py-1 rounded-full">
+                🏆 {{ m.player1 }} wins!
+              </span>
+              <span *ngIf="m.score2 > m.score1"
+                class="inline-block text-xs font-medium text-green-700 bg-green-100 px-3 py-1 rounded-full">
+                🏆 {{ m.player2 }} wins!
+              </span>
+              <span *ngIf="m.score1 === m.score2"
+                class="inline-block text-xs font-medium text-gray-700 bg-gray-200 px-3 py-1 rounded-full">
+                🤝 Tie
+              </span>
+            </div>
+          </div>
+
+          <button (click)="deleteMatch(i)"
+            class="ml-4 text-red-500 hover:text-red-700 transition p-2 hover:bg-red-50 rounded-lg">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+              </path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="matches.length === 0" class="bg-white rounded-xl shadow-lg p-12 text-center">
+      <div class="text-6xl mb-4">🏓</div>
+      <h3 class="text-xl font-semibold text-gray-700 mb-2">No matches yet</h3>
+      <p class="text-gray-500">Record your first match above to get started!</p>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="max-w-4xl mx-auto px-4 py-8 text-center text-gray-600">
+    <p class="text-sm">Data is stored locally and synced to Google Sheets</p>
+  </footer>
+</div>
