@@ -1,0 +1,83 @@
+{
+  "configVersion": 1,
+  "timestamp": 1766385389488,
+  "index": "/pingpong-app/index.html",
+  "assetGroups": [
+    {
+      "name": "app",
+      "installMode": "prefetch",
+      "updateMode": "prefetch",
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "urls": [
+        "/pingpong-app/favicon.ico",
+        "/pingpong-app/index.html",
+        "/pingpong-app/main-AKP3DRZE.js",
+        "/pingpong-app/manifest.webmanifest",
+        "/pingpong-app/polyfills-FFHMD2TL.js",
+        "/pingpong-app/styles-VBVGBRML.css"
+      ],
+      "patterns": []
+    },
+    {
+      "name": "assets",
+      "installMode": "lazy",
+      "updateMode": "prefetch",
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "urls": [
+        "/pingpong-app/assets/PingPong Stats - Sheet1.csv",
+        "/pingpong-app/assets/PingPong Stats - Sheet1.csv:Zone.Identifier",
+        "/pingpong-app/assets/icons/icon-128x128.png.svg",
+        "/pingpong-app/assets/icons/icon-144x144.png.svg",
+        "/pingpong-app/assets/icons/icon-152x152.png.svg",
+        "/pingpong-app/assets/icons/icon-192x192.png.svg",
+        "/pingpong-app/assets/icons/icon-384x384.png.svg",
+        "/pingpong-app/assets/icons/icon-512x512.png.svg",
+        "/pingpong-app/assets/icons/icon-72x72.png.svg",
+        "/pingpong-app/assets/icons/icon-96x96.png.svg"
+      ],
+      "patterns": []
+    }
+  ],
+  "dataGroups": [],
+  "hashTable": {
+    "/pingpong-app/assets/PingPong Stats - Sheet1.csv": "35da68f72fd93cc995f933f64d88c424c8925b70",
+    "/pingpong-app/assets/PingPong Stats - Sheet1.csv:Zone.Identifier": "2f4e6a743965b1c8b1177e9046d1e9c7581f888f",
+    "/pingpong-app/assets/icons/icon-128x128.png.svg": "262fff6c44f7dd206b0cbd0dc2fdf230a64c3996",
+    "/pingpong-app/assets/icons/icon-144x144.png.svg": "97a58dc6f011167646487a41b08e4f73fcd68e33",
+    "/pingpong-app/assets/icons/icon-152x152.png.svg": "ca4944f6fe63cfb507fd2b068d73bd1c41b91946",
+    "/pingpong-app/assets/icons/icon-192x192.png.svg": "2adc74ae630612fb2adec6fc919b5d4623447ab5",
+    "/pingpong-app/assets/icons/icon-384x384.png.svg": "6f57ed35c4f3052975bc41b88ea6f82fb0c53f5e",
+    "/pingpong-app/assets/icons/icon-512x512.png.svg": "8711f9a2b33863c326538e7d2f574e52a5b69675",
+    "/pingpong-app/assets/icons/icon-72x72.png.svg": "cee29f3cdc9eb7cab04d8b597ffe8c098a71722c",
+    "/pingpong-app/assets/icons/icon-96x96.png.svg": "a825a383d70dcddaceec06b755bafe8f7824af19",
+    "/pingpong-app/favicon.ico": "9c39f434fe1261f68c5e3eefdf734630d99c5670",
+    "/pingpong-app/index.html": "7e955363c22c665a4d9cec74e286e3002e437236",
+    "/pingpong-app/main-AKP3DRZE.js": "c102cef7f79536d1b29b723535101f212712d72c",
+    "/pingpong-app/manifest.webmanifest": "3480875569235b2e880735b916c19ba905b9c4fc",
+    "/pingpong-app/polyfills-FFHMD2TL.js": "f49b49a155bc7d192db62a4c15d0a612b460a667",
+    "/pingpong-app/styles-VBVGBRML.css": "e8f166bf0d33639d47d45f7635c160056543babb"
+  },
+  "navigationUrls": [
+    {
+      "positive": true,
+      "regex": "^\\/.*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*\\.[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*\\/.*$"
+    }
+  ],
+  "navigationRequestStrategy": "performance"
+}
