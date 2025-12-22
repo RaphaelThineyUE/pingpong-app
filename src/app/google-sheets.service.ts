@@ -35,6 +35,13 @@ export class GoogleSheetsService {
     }
 
     /**
+     * Check if Google Sheets read access is configured
+     */
+    isReadConfigured(): boolean {
+        return !!this.SPREADSHEET_ID && !!this.API_KEY && !!this.SHEET_NAME;
+    }
+
+    /**
      * Submit a match to Google Sheets
      * The data will be appended as: [Date, Dad, Luc, Alex, Mom]
      * Only the two players who played will have scores, others will be empty
@@ -131,6 +138,41 @@ export class GoogleSheetsService {
         };
 
         return this.http.post(url, body, { params });
+    }
+
+    /**
+     * Delete a match by sheet row number via Web App
+     */
+    deleteMatchFromSheet(rowNumber: number): Observable<any> {
+        if (!this.WEB_APP_URL) {
+            return new Observable(observer => {
+                observer.error(new Error('Web App URL is not configured'));
+            });
+        }
+
+        const data = {
+            action: 'delete',
+            rowNumber
+        };
+
+        return new Observable(observer => {
+            fetch(this.WEB_APP_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+                redirect: 'follow'
+            })
+            .then(() => {
+                observer.next({ success: true, message: 'Delete requested (no-cors mode)' });
+                observer.complete();
+            })
+            .catch((error: unknown) => {
+                observer.error(error);
+            });
+        });
     }
 
     /**

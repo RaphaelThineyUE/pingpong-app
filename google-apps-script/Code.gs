@@ -46,6 +46,16 @@ function doPost(e) {
       return createCORSResponse(false, 'Sheet not found');
     }
     
+    if (data.action === 'delete') {
+      const rowNumber = Number(data.rowNumber);
+      if (!rowNumber || rowNumber < 1) {
+        return createCORSResponse(false, 'Invalid row number');
+      }
+
+      sheet.deleteRow(rowNumber);
+      return createCORSResponse(true, 'Match deleted successfully', { rowNumber: rowNumber });
+    }
+
     // Prepare the row data: [Date, Dad, Luc, Alex, Mom]
     const rowData = [
       data.dateTime || new Date().toLocaleString(),

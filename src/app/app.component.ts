@@ -1,7 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
 import { GoogleSheetsService } from './google-sheets.service';
 
 interface Match {
@@ -10,6 +9,7 @@ interface Match {
   score1: number;
   score2: number;
   dateTime: string;
+  sheetRow?: number;
 }
 
 interface MatchForm {
@@ -26,7 +26,7 @@ interface MatchForm {
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'PingPong Stats Tracker';
 
   players = ['Dad', 'Luc', 'Alex', 'Mom'];
@@ -42,9 +42,10 @@ export class AppComponent {
   submitting = false;
 
   constructor(
-    private http: HttpClient,
     private googleSheetsService: GoogleSheetsService
-  ) {
+  ) {}
+
+  ngOnInit(): void {
     this.loadMatches();
   }
 
@@ -112,10 +113,86 @@ export class AppComponent {
     if (stored) {
       this.matches = JSON.parse(stored);
     }
+
+    if (!this.googleSheetsService.isReadConfigured()) {
+      return;
+    }
+
+    this.googleSheetsService.getMatches().subscribe({
+      next: (response: { values?: string[][] }) => {
+        const rows = response?.values ?? [];
+        const parsedMatches = this.parseMatchesFromSheetRows(rows);
+        if (parsedMatches.length > 0) {
+          this.matches = parsedMatches;
+          this.saveMatches();
+        }
+      },
+      error: (error: unknown) => {
+        console.error('Error loading matches from Google Sheets:', error);
+      }
+    });
   }
 
   deleteMatch(index: number) {
-    this.matches.splice(index, 1);
+    const [deleted] = this.matches.splice(index, 1);
     this.saveMatches();
+
+    if (deleted?.sheetRow && this.googleSheetsService.isConfigured()) {
+      this.googleSheetsService.deleteMatchFromSheet(deleted.sheetRow).subscribe({
+        next: () => {
+          console.log('Deleted match from Google Sheets:', deleted.sheetRow);
+        },
+        error: (error: unknown) => {
+          console.error('Error deleting match from Google Sheets:', error);
+        }
+      });
+    }
+  }
+
+  private parseMatchesFromSheetRows(rows: string[][]): Match[] {
+    const playerColumns = this.players;
+    const matches: Match[] = [];
+
+    for (let index = 0; index < rows.length; index += 1) {
+      const row = rows[index];
+      if (!row || row.length === 0) {
+        continue;
+      }
+
+      const dateTime = row[0] ?? '';
+      const normalizedDate = String(dateTime).toLowerCase();
+      if (normalizedDate.includes('date')) {
+        continue;
+      }
+
+      const scoredPlayers = playerColumns
+        .map((player, index) => {
+          const rawScore = row[index + 1];
+          if (rawScore === undefined || rawScore === '') {
+            return null;
+          }
+          const score = Number(rawScore);
+          if (Number.isNaN(score)) {
+            return null;
+          }
+          return { player, score };
+        })
+        .filter((entry): entry is { player: string; score: number } => entry !== null);
+
+      if (scoredPlayers.length < 2) {
+        continue;
+      }
+
+      matches.push({
+        player1: scoredPlayers[0].player,
+        player2: scoredPlayers[1].player,
+        score1: scoredPlayers[0].score,
+        score2: scoredPlayers[1].score,
+        dateTime: String(dateTime),
+        sheetRow: index + 1
+      });
+    }
+
+    return matches.reverse();
   }
 }
