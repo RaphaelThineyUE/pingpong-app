@@ -5,9 +5,15 @@
       <div class="relative flex items-center gap-4">
         <img src="assets/icons/pingpong-72.svg" alt="PingPong logo" class="w-10 h-10">
         <span class="logo-ball" aria-hidden="true"></span>
-        <div>
-          <h1 class="text-3xl font-bold text-emerald-800">PingPong Stats Tracker</h1>
-          <p class="text-emerald-700 mt-1">Track your ping pong matches easily</p>
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between w-full gap-2">
+          <div>
+            <h1 class="text-3xl font-bold text-emerald-800">PingPong Stats Tracker</h1>
+            <p class="text-emerald-700 mt-1">Track your ping pong matches easily</p>
+          </div>
+          <span
+            class="text-xs font-semibold uppercase tracking-wide text-emerald-700 bg-emerald-100 px-3 py-1 rounded-full md:ml-auto">
+            Release {{ releaseDate }}
+          </span>
         </div>
       </div>
     </div>
@@ -17,12 +23,14 @@
   <!-- Main Content -->
   <main class="max-w-4xl mx-auto px-4 py-8">
 
-    <app-match-wizard
-      [players]="players"
-      [matches]="matches"
-      [submitting]="submitting"
-      (matchSubmit)="submitWizardMatch($event)">
-    </app-match-wizard>
+    <div class="mb-8">
+      <app-match-wizard
+        [players]="players"
+        [matches]="matches"
+        [submitting]="submitting"
+        (matchSubmit)="submitWizardMatch($event)">
+      </app-match-wizard>
+    </div>
 
     <app-leaderboard-status
       [leaderboard]="leaderboard"
@@ -44,7 +52,8 @@
   </main>
 
   <!-- Footer -->
-  <footer class="max-w-4xl mx-auto px-4 py-8 text-center text-gray-600">
-    <p class="text-sm">Data is stored locally and synced to Google Sheets</p>
+  <footer class="max-w-4xl mx-auto px-4 py-6 text-center text-gray-500">
+    <p class="text-xs uppercase tracking-wide text-gray-400">Last release: {{ releaseDate }}</p>
+    <p class="text-sm mt-2">Data is stored locally and synced to Google Sheets</p>
   </footer>
 </div>

@@ -15,4 +15,22 @@ export class MatchHistoryComponent {
   @Input() googleSheetUrl = '';
   @Input() googleSheetName = '';
   @Output() deleteMatch = new EventEmitter<Match>();
+
+  isExpanded = false;
+  showAll = false;
+
+  get displayedMatches(): Match[] {
+    if (this.showAll) {
+      return this.filteredMatches;
+    }
+    return this.filteredMatches.slice(0, 5);
+  }
+
+  toggleExpanded() {
+    this.isExpanded = !this.isExpanded;
+  }
+
+  toggleShowAll() {
+    this.showAll = !this.showAll;
+  }
 }

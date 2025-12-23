@@ -17,6 +17,7 @@ import { MatchWizardComponent } from './components/match-wizard/match-wizard.com
 })
 export class AppComponent implements OnInit {
   title = 'PingPong Stats Tracker';
+  releaseDate = environment.releaseDate || '2024-12-23';
 
   players = ['Dad', 'Luc', 'Alex', 'Mom'];
 

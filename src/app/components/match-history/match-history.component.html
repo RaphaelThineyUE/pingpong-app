@@ -1,22 +1,38 @@
 <div class="bg-white rounded-xl shadow-lg p-6" data-testid="match-history" *ngIf="matches.length > 0; else emptyState">
-  <div class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between mb-6">
+  <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between mb-6">
     <div>
       <h2 class="text-2xl font-semibold text-gray-800">Recent Matches</h2>
-      <p class="text-sm text-gray-500">Showing {{ filteredMatches.length }} of {{ matches.length }}</p>
+      <p class="text-sm text-gray-500">Showing {{ displayedMatches.length }} of {{ filteredMatches.length }} ({{ matches.length }} total)</p>
     </div>
-    <a *ngIf="googleSheetUrl"
-      [href]="googleSheetUrl"
-      target="_blank"
-      rel="noopener"
-      data-testid="sheet-link"
-      class="inline-flex items-center gap-2 text-sm font-medium text-emerald-700 hover:text-emerald-800">
-      View raw Google Sheet ({{ googleSheetName }})
-      <span aria-hidden="true">↗</span>
-    </a>
+    <div class="flex flex-wrap items-center gap-3">
+      <button type="button"
+        class="text-sm font-semibold text-emerald-700 hover:text-emerald-800"
+        (click)="toggleExpanded()">
+        {{ isExpanded ? 'Hide matches' : 'Show recent matches' }}
+      </button>
+      <button *ngIf="isExpanded && filteredMatches.length > 5" type="button"
+        class="text-sm font-semibold text-emerald-700 hover:text-emerald-800"
+        (click)="toggleShowAll()">
+        {{ showAll ? 'Show latest 5' : 'Show all' }}
+      </button>
+      <a *ngIf="googleSheetUrl"
+        [href]="googleSheetUrl"
+        target="_blank"
+        rel="noopener"
+        data-testid="sheet-link"
+        class="inline-flex items-center gap-2 text-sm font-medium text-emerald-700 hover:text-emerald-800">
+        View raw Google Sheet ({{ googleSheetName }})
+        <span aria-hidden="true">↗</span>
+      </a>
+    </div>
   </div>
 
-  <div class="space-y-4" *ngIf="filteredMatches.length > 0; else noMatchesInRange">
-    <div *ngFor="let m of filteredMatches"
+  <div *ngIf="!isExpanded && filteredMatches.length > 0" class="rounded-xl border border-dashed border-emerald-200 bg-emerald-50/50 p-4 text-sm text-emerald-700">
+    Recent matches are collapsed by default. Tap “Show recent matches” to view the latest games.
+  </div>
+
+  <div class="space-y-4" *ngIf="isExpanded && filteredMatches.length > 0; else noMatchesInRange">
+    <div *ngFor="let m of displayedMatches"
       data-testid="match-card"
       class="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition">
 
@@ -100,7 +116,7 @@
   </details>
 
   <ng-template #noMatchesInRange>
-    <div class="rounded-xl border border-dashed border-gray-200 p-6 text-center text-gray-500">
+    <div *ngIf="isExpanded" class="rounded-xl border border-dashed border-gray-200 p-6 text-center text-gray-500">
       No matches in the selected date range.
     </div>
   </ng-template>
