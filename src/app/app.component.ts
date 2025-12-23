@@ -7,11 +7,12 @@ import { Match, MatchForm } from './db/models/match.model';
 import { MatchFormComponent } from './components/match-form/match-form.component';
 import { LeaderboardStatusComponent } from './components/leaderboard-status/leaderboard-status.component';
 import { MatchHistoryComponent } from './components/match-history/match-history.component';
+import { MatchWizardComponent } from './components/match-wizard/match-wizard.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, MatchFormComponent, LeaderboardStatusComponent, MatchHistoryComponent],
+  imports: [CommonModule, MatchFormComponent, LeaderboardStatusComponent, MatchHistoryComponent, MatchWizardComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
@@ -82,6 +83,11 @@ export class AppComponent implements OnInit {
         score2: null
       };
     }
+  }
+
+  submitWizardMatch(match: MatchForm) {
+    this.match = { ...match };
+    this.submitMatch();
   }
 
   submitToGoogleSheets(match: Match) {
