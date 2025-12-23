@@ -17,22 +17,12 @@
   <!-- Main Content -->
   <main class="max-w-4xl mx-auto px-4 py-8">
 
-    <div class="grid gap-8 lg:grid-cols-2">
-      <app-match-form
-        [players]="players"
-        [match]="match"
-        [availablePlayers2]="availablePlayers2"
-        [submitting]="submitting"
-        (matchSubmit)="submitMatch()">
-      </app-match-form>
-
-      <app-match-wizard
-        [players]="players"
-        [matches]="matches"
-        [submitting]="submitting"
-        (matchSubmit)="submitWizardMatch($event)">
-      </app-match-wizard>
-    </div>
+    <app-match-wizard
+      [players]="players"
+      [matches]="matches"
+      [submitting]="submitting"
+      (matchSubmit)="submitWizardMatch($event)">
+    </app-match-wizard>
 
     <app-leaderboard-status
       [leaderboard]="leaderboard"

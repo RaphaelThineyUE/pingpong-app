@@ -4,12 +4,13 @@ A Progressive Web App (PWA) built with Angular 17 and Tailwind CSS for tracking 
 
 ## Features
 
-- ✅ **Easy Score Entry**: Select two players and enter their scores
+- ✅ **Wizard Score Entry**: One-handed friendly match flow
 - 📱 **Progressive Web App**: Install on mobile devices and use offline
 - 🎨 **Modern UI**: Clean, responsive interface built with Tailwind CSS
 - 💾 **Local Storage**: Automatically saves matches locally
 - ☁️ **Google Sheets Sync**: Syncs match data to Google Sheets
-- 🏆 **Match History**: View recent matches with winner indicators
+- 🏆 **Leaderboard + Filters**: Elo, win %, and date range filters
+- 📊 **Raw Data View**: Expandable table for all recorded matches
 
 ## Prerequisites
 
@@ -67,24 +68,27 @@ To enable Google Sheets integration, you need to set up the Google Sheets API:
 
 ### Step 4: Configure the Application
 
-Edit the file `src/app/google-sheets.service.ts`:
+Edit the environment files:
 
 ```typescript
-// Replace these values with your own
-private SPREADSHEET_ID = 'YOUR_SPREADSHEET_ID_HERE';
-private API_KEY = 'YOUR_API_KEY_HERE';
-private SHEET_NAME = 'Sheet1'; // Change if your sheet has a different name
+// src/environments/environment.ts (and environment.prod.ts)
+googleSheets: {
+  spreadsheetId: 'YOUR_SPREADSHEET_ID_HERE',
+  apiKey: 'YOUR_API_KEY_HERE',
+  sheetName: 'Sheet1',
+  webAppUrl: 'YOUR_WEB_APP_URL_HERE'
+}
 ```
 
 ## Data Format
 
 The app submits data to Google Sheets in the following format:
 
-| Column A | Column B | Column C | Column D |
-|----------|----------|----------|----------|
-| Player 1 | Score 1  | Player 2 | Score 2  |
-| Dad      | 21       | Luc      | 19       |
-| Mom      | 18       | Alex     | 21       |
+| Column A | Column B | Column C | Column D | Column E |
+|----------|----------|----------|----------|----------|
+| Date     | Dad      | Luc      | Alex     | Mom      |
+| 4/12/24  | 21       |          | 19       |          |
+| 4/13/24  |          | 21       |          | 18       |
 
 This matches your existing CSV structure.
 
@@ -124,6 +128,10 @@ npx http-server -p 8080 -c-1 dist/pingpong-app/browser
 
 Then open `http://localhost:8080/` in your browser.
 
+## Environment Variables
+
+- `MONGODB_URI`: used by `src/app/db/db-conn.ts` for MongoDB connectivity.
+
 ## PWA Features
 
 ### Installing on Mobile
@@ -147,6 +155,8 @@ pingpong-app/
 │   │   ├── app.component.ts          # Main component with match logic
 │   │   ├── app.component.html        # UI template
 │   │   ├── app.component.css         # Component styles
+│   │   ├── components/               # Match wizard, leaderboard, history
+│   │   ├── db/                       # Local DB utilities (Mongo script)
 │   │   ├── app.config.ts             # App configuration with PWA
 │   │   └── google-sheets.service.ts  # Google Sheets API integration
 │   ├── assets/                       # Static assets
