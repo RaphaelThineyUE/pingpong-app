@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { GoogleSheetsService } from './google-sheets.service';
+import { PingPongLeaderboardService, LeaderboardResult, Match as LeaderboardMatch } from './stats-leaderboard';
 
 interface Match {
   player1: string;
@@ -40,9 +41,13 @@ export class AppComponent implements OnInit {
 
   matches: Match[] = [];
   submitting = false;
+  leaderboard: LeaderboardResult | null = null;
+  startDate = '';
+  endDate = '';
 
   constructor(
-    private googleSheetsService: GoogleSheetsService
+    private googleSheetsService: GoogleSheetsService,
+    private leaderboardService: PingPongLeaderboardService
   ) {}
 
   ngOnInit(): void {
@@ -71,6 +76,7 @@ export class AppComponent implements OnInit {
 
       this.matches.unshift(matchToSubmit);
       this.saveMatches();
+      this.updateLeaderboard();
 
       // Submit to Google Sheets (only if webAppUrl is configured)
       if (this.googleSheetsService.isConfigured()) {
@@ -113,6 +119,7 @@ export class AppComponent implements OnInit {
     if (stored) {
       this.matches = JSON.parse(stored);
     }
+    this.updateLeaderboard();
 
     if (!this.googleSheetsService.isReadConfigured()) {
       return;
@@ -125,6 +132,7 @@ export class AppComponent implements OnInit {
         if (parsedMatches.length > 0) {
           this.matches = parsedMatches;
           this.saveMatches();
+          this.updateLeaderboard();
         }
       },
       error: (error: unknown) => {
@@ -133,9 +141,15 @@ export class AppComponent implements OnInit {
     });
   }
 
-  deleteMatch(index: number) {
+  deleteMatch(match: Match) {
+    const index = this.matches.indexOf(match);
+    if (index === -1) {
+      return;
+    }
+
     const [deleted] = this.matches.splice(index, 1);
     this.saveMatches();
+    this.updateLeaderboard();
 
     if (deleted?.sheetRow && this.googleSheetsService.isConfigured()) {
       this.googleSheetsService.deleteMatchFromSheet(deleted.sheetRow).subscribe({
@@ -147,6 +161,68 @@ export class AppComponent implements OnInit {
         }
       });
     }
+  }
+
+  updateLeaderboard() {
+    const filteredMatches = this.filteredMatches;
+    if (filteredMatches.length === 0) {
+      this.leaderboard = null;
+      return;
+    }
+
+    const leaderboardMatches: LeaderboardMatch[] = filteredMatches.map(match => ({
+      playerA: match.player1,
+      scoreA: match.score1,
+      playerB: match.player2,
+      scoreB: match.score2
+    }));
+
+    this.leaderboard = this.leaderboardService.computeFromMatches(leaderboardMatches);
+  }
+
+  get leaderboardMatchCount(): number {
+    return this.filteredMatches.length;
+  }
+
+  get filteredMatches(): Match[] {
+    return this.filterMatchesByDate(this.matches);
+  }
+
+  private filterMatchesByDate(matches: Match[]): Match[] {
+    if (!this.startDate && !this.endDate) {
+      return matches;
+    }
+
+    const start = this.parseDateInput(this.startDate);
+    const end = this.parseDateInput(this.endDate);
+    if (end) {
+      end.setHours(23, 59, 59, 999);
+    }
+
+    return matches.filter(match => {
+      const parsed = new Date(match.dateTime);
+      if (Number.isNaN(parsed.getTime())) {
+        return false;
+      }
+      if (start && parsed < start) {
+        return false;
+      }
+      if (end && parsed > end) {
+        return false;
+      }
+      return true;
+    });
+  }
+
+  private parseDateInput(value: string): Date | null {
+    if (!value) {
+      return null;
+    }
+    const [year, month, day] = value.split('-').map(Number);
+    if (!year || !month || !day) {
+      return null;
+    }
+    return new Date(year, month - 1, day);
   }
 
   private parseMatchesFromSheetRows(rows: string[][]): Match[] {
