@@ -1,7 +1,7 @@
+import { environment } from "../../environments/environment";
 
 const { MongoClient, ServerApiVersion } = require('mongodb');
-const uri = "mongodb+srv://raphaeldambournet_db_user:rvUol3NdoxHJhojc@cluster1.yiedgvd.mongodb.net/?appName=Cluster1";
-
+const uri = environment.mongodb.uri;
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
   serverApi: {
