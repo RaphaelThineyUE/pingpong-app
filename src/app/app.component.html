@@ -1,10 +1,17 @@
-<div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+<div class="min-h-screen bg-gradient-to-br from-emerald-50 to-green-100">
   <!-- Header -->
-  <header class="bg-white shadow-md">
-    <div class="max-w-4xl mx-auto px-4 py-6">
-      <h1 class="text-3xl font-bold text-gray-800">🏓 PingPong Stats Tracker</h1>
-      <p class="text-gray-600 mt-1">Track your ping pong matches easily</p>
+  <header class="bg-white/90 backdrop-blur shadow-md">
+    <div class="max-w-4xl mx-auto px-4 py-6 flex items-center gap-4">
+      <div class="relative flex items-center gap-4">
+        <img src="assets/icons/pingpong-72.svg" alt="PingPong logo" class="w-10 h-10">
+        <span class="logo-ball" aria-hidden="true"></span>
+        <div>
+          <h1 class="text-3xl font-bold text-emerald-800">PingPong Stats Tracker</h1>
+          <p class="text-emerald-700 mt-1">Track your ping pong matches easily</p>
+        </div>
+      </div>
     </div>
+    <div class="net-divider"></div>
   </header>
 
   <!-- Main Content -->
@@ -71,7 +78,7 @@
         <!-- Submit Button -->
         <button type="submit"
           [disabled]="!match.player1 || !match.player2 || match.score1 === null || match.score2 === null"
-          class="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-700 transition disabled:bg-gray-300 disabled:cursor-not-allowed shadow-md hover:shadow-lg">
+          class="w-full bg-emerald-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-emerald-700 transition disabled:bg-gray-300 disabled:cursor-not-allowed shadow-md hover:shadow-lg">
           Record Match
         </button>
       </form>
@@ -96,9 +103,9 @@
                 <span class="font-semibold text-gray-800">{{ m.player1 }}</span>
               </div>
               <div class="flex items-center space-x-3">
-                <span class="text-2xl font-bold text-blue-600">{{ m.score1 }}</span>
+                <span class="text-2xl font-bold text-emerald-700">{{ m.score1 }}</span>
                 <span class="text-gray-400">-</span>
-                <span class="text-2xl font-bold text-blue-600">{{ m.score2 }}</span>
+                <span class="text-2xl font-bold text-emerald-700">{{ m.score2 }}</span>
               </div>
               <div class="flex-1">
                 <span class="font-semibold text-gray-800">{{ m.player2 }}</span>

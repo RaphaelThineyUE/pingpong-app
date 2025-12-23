@@ -1,29 +1,59 @@
 {
     "name": "PingPong Stats Tracker",
     "short_name": "PingPong",
-    "theme_color": "#1976d2",
-    "background_color": "#fafafa",
+    "theme_color": "#14532d",
+    "background_color": "#0f172a",
     "display": "standalone",
     "scope": "./",
     "start_url": "./",
     "icons": [
         {
-            "src": "assets/icons/icon-72x72.png.svg",
+            "src": "assets/icons/pingpong-72.svg",
             "sizes": "72x72",
             "type": "image/svg+xml",
             "purpose": "any"
         },
         {
-            "src": "assets/icons/icon-192x192.png.svg",
+            "src": "assets/icons/pingpong-72.png",
+            "sizes": "72x72",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "assets/icons/pingpong-192.svg",
             "sizes": "192x192",
             "type": "image/svg+xml",
             "purpose": "any"
         },
         {
-            "src": "assets/icons/icon-512x512.png.svg",
+            "src": "assets/icons/pingpong-192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "assets/icons/pingpong-512.svg",
             "sizes": "512x512",
             "type": "image/svg+xml",
             "purpose": "any"
+        },
+        {
+            "src": "assets/icons/pingpong-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "assets/icons/pingpong-maskable.svg",
+            "sizes": "512x512",
+            "type": "image/svg+xml",
+            "purpose": "maskable"
+        },
+        {
+            "src": "assets/icons/pingpong-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable"
         }
     ]
 }

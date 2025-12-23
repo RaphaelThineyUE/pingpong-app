@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Safe zone padding for maskable icon -->
+  <rect width="512" height="512" rx="64" fill="#14532d"/>
+  <g transform="translate(32,32)">
+    <rect x="222" y="32" width="4" height="384" fill="#16a34a" opacity="0.5"/>
+    <g>
+      <circle cx="160" cy="240" r="96" fill="#ef4444"/>
+      <rect x="226" y="288" width="32" height="112" rx="16" transform="rotate(35 242 344)" fill="#a16207"/>
+    </g>
+    <g>
+      <circle cx="322" cy="192" r="96" fill="#3b82f6"/>
+      <rect x="358" y="244" width="32" height="112" rx="16" transform="rotate(-25 374 300)" fill="#a16207"/>
+    </g>
+    <circle cx="310" cy="324" r="28" fill="#fff"/>
+  </g>
+</svg>
