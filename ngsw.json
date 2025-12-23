@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1766478476927,
+  "timestamp": 1766478622320,
   "index": "/pingpong-app/index.html",
   "assetGroups": [
     {
@@ -13,10 +13,10 @@
       "urls": [
         "/pingpong-app/favicon.ico",
         "/pingpong-app/index.html",
-        "/pingpong-app/main-AXSNT2FI.js",
+        "/pingpong-app/main-VDAZKZFE.js",
         "/pingpong-app/manifest.webmanifest",
         "/pingpong-app/polyfills-FFHMD2TL.js",
-        "/pingpong-app/styles-BFDSQ3I2.css"
+        "/pingpong-app/styles-NSF2KVSK.css"
       ],
       "patterns": []
     },
@@ -87,11 +87,11 @@
     "/pingpong-app/assets/icons/pingpong-96.png": "38a79fe00ef42e47aff0f0f54cef4b851878be61",
     "/pingpong-app/assets/icons/pingpong-maskable.svg": "eaf709b86511110c0fc72899ad070dd132e6dad2",
     "/pingpong-app/favicon.ico": "9c39f434fe1261f68c5e3eefdf734630d99c5670",
-    "/pingpong-app/index.html": "aebf27d27b18ef2e988a25c6c6a7de06a12ed164",
-    "/pingpong-app/main-AXSNT2FI.js": "9ac663f4e30c00948754bbb9cd59ddb57b64b9a4",
+    "/pingpong-app/index.html": "1eae49e0f09d15a9e662ed5f99703e14eba89f11",
+    "/pingpong-app/main-VDAZKZFE.js": "f59220f7e7cda3190f1f6309074a93d50b1980d1",
     "/pingpong-app/manifest.webmanifest": "8c43c6eeb8f46116a2099340bb7df17a16429ad0",
     "/pingpong-app/polyfills-FFHMD2TL.js": "f49b49a155bc7d192db62a4c15d0a612b460a667",
-    "/pingpong-app/styles-BFDSQ3I2.css": "b48712753f7e0ffb702d4869b66933037b5402c9"
+    "/pingpong-app/styles-NSF2KVSK.css": "d00299008c13faa0f9406dde46e4718f42b3d61f"
   },
   "navigationUrls": [
     {
