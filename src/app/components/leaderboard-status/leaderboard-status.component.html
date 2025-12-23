@@ -34,11 +34,17 @@
   <ng-container *ngIf="leaderboard; else leaderboardEmpty">
     <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-6">
       <div class="rounded-xl border border-emerald-100 bg-emerald-50 p-4">
-        <p class="text-xs font-semibold uppercase tracking-wide text-emerald-700">Elo Champion</p>
+        <p class="text-xs font-semibold uppercase tracking-wide text-emerald-700">
+          Elo Champion
+          <span class="ml-1 cursor-help" title="Elo estimates player strength based on match results.">ⓘ</span>
+        </p>
         <p class="text-lg font-semibold text-emerald-900 mt-2">{{ leaderboard.titles.eloChampion }}</p>
       </div>
       <div class="rounded-xl border border-emerald-100 bg-emerald-50 p-4">
-        <p class="text-xs font-semibold uppercase tracking-wide text-emerald-700">Win % Champion</p>
+        <p class="text-xs font-semibold uppercase tracking-wide text-emerald-700">
+          Win % Champion
+          <span class="ml-1 cursor-help" title="Win percentage is wins divided by total games.">ⓘ</span>
+        </p>
         <p class="text-lg font-semibold text-emerald-900 mt-2">{{ leaderboard.titles.winPctChampion }}</p>
       </div>
       <div class="rounded-xl border border-emerald-100 bg-emerald-50 p-4">
@@ -59,8 +65,8 @@
             <th class="py-2 text-left">Player</th>
             <th class="py-2 text-right">Wins</th>
             <th class="py-2 text-right">Games</th>
-            <th class="py-2 text-right">Win %</th>
-            <th class="py-2 text-right">Elo</th>
+            <th class="py-2 text-right" title="Win percentage is wins divided by total games.">Win %</th>
+            <th class="py-2 text-right" title="Elo is a rating system that adjusts based on wins and losses.">Elo</th>
           </tr>
         </thead>
         <tbody>
