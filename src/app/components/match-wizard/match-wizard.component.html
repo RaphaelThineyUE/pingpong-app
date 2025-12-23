@@ -1,0 +1,102 @@
+<div class="wizard-panel" data-testid="match-wizard">
+  <div class="wizard-header">
+    <div>
+      <p class="wizard-kicker">Quick Match Wizard</p>
+      <h2 class="text-2xl font-semibold text-emerald-900">Tap, play, celebrate.</h2>
+    </div>
+    <span class="wizard-badge">Mobile-first</span>
+  </div>
+
+  <div class="wizard-body">
+    <ng-container *ngIf="step === 0">
+      <p class="wizard-question">Who won the match?</p>
+      <div class="grid grid-cols-2 gap-3">
+        <button type="button" *ngFor="let player of winnerOptions" (click)="pickWinner(player)"
+          class="wizard-choice">
+          <span class="text-lg font-semibold">{{ player }}</span>
+          <span class="text-xs text-emerald-700">Tap to crown</span>
+        </button>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="step === 1">
+      <p class="wizard-question">Who did {{ winner }} play?</p>
+      <div *ngIf="opponent" class="wizard-suggestion">
+        <p class="text-sm text-emerald-800">Suggested opponent: <strong>{{ opponent }}</strong></p>
+        <button type="button" class="wizard-primary small" (click)="pickOpponent(opponent)">
+          Use {{ opponent }}
+        </button>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <button type="button" *ngFor="let player of opponentOptions" (click)="pickOpponent(player)"
+          class="wizard-choice alt">
+          <span class="text-lg font-semibold">{{ player }}</span>
+          <span class="text-xs text-emerald-700">Opponent</span>
+        </button>
+      </div>
+      <button type="button" class="wizard-link" (click)="step = 0">Back</button>
+    </ng-container>
+
+    <ng-container *ngIf="step === 2">
+      <p class="wizard-question">
+        <select class="wizard-select" [(ngModel)]="winner" name="winner">
+          <option *ngFor="let player of players" [value]="player">{{ player }}</option>
+        </select>
+        is the WINNER!!!
+      </p>
+      <div *ngIf="isCompact" class="grid grid-cols-2 gap-3">
+        <button type="button" *ngFor="let player of opponentOptions"
+          (click)="opponent = player"
+          class="wizard-choice alt"
+          [class.active]="opponent === player">
+          <span class="text-base font-semibold">{{ player }}</span>
+          <span class="text-xs text-emerald-700">Opponent</span>
+        </button>
+      </div>
+      <p class="wizard-subtext">
+        The LOSER is <strong>{{ opponent }}</strong> with a LOSER score of
+      </p>
+
+      <div class="grid gap-3">
+        <div class="flex gap-2 flex-wrap">
+          <button type="button" *ngFor="let option of scoreOptions"
+            class="wizard-score"
+            [class.active]="winnerScore === option.value"
+            (click)="setWinnerScore(option.value)">
+            {{ option.label }}
+          </button>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <input type="number" min="0" [(ngModel)]="loserScore" name="loserScore"
+            class="wizard-input" placeholder="Loser score" />
+          <span class="text-sm text-emerald-800 font-semibold">for {{ opponent }}</span>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between mt-6">
+        <button type="button" class="wizard-link" (click)="step = isCompact ? 0 : 1">Back</button>
+        <button type="button" class="wizard-primary" [disabled]="submitting || !opponent" (click)="submitMatch()">
+          Record Match
+        </button>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="step === 3">
+      <div class="wizard-celebrate">
+        <p class="wizard-question">Congratulations, {{ winner }}!</p>
+        <p class="wizard-subtext">You crushed it: {{ winnerScore }} - {{ loserScore }}.</p>
+        <div class="wizard-brag" *ngIf="braggingLines.length > 0">
+          <p class="text-sm font-semibold text-emerald-900">Bragging rights</p>
+          <ul>
+            <li *ngFor="let line of braggingLines">{{ line }}</li>
+          </ul>
+        </div>
+        <img *ngIf="selectedGif" [src]="selectedGif" alt="Celebration gif" class="wizard-gif" />
+      </div>
+      <button type="button" class="wizard-primary w-full mt-4" (click)="restart()">
+        Record another match
+      </button>
+    </ng-container>
+  </div>
+</div>

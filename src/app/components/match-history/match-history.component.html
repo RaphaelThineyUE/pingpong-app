@@ -1,0 +1,115 @@
+<div class="bg-white rounded-xl shadow-lg p-6" data-testid="match-history" *ngIf="matches.length > 0; else emptyState">
+  <div class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between mb-6">
+    <div>
+      <h2 class="text-2xl font-semibold text-gray-800">Recent Matches</h2>
+      <p class="text-sm text-gray-500">Showing {{ filteredMatches.length }} of {{ matches.length }}</p>
+    </div>
+    <a *ngIf="googleSheetUrl"
+      [href]="googleSheetUrl"
+      target="_blank"
+      rel="noopener"
+      data-testid="sheet-link"
+      class="inline-flex items-center gap-2 text-sm font-medium text-emerald-700 hover:text-emerald-800">
+      View raw Google Sheet ({{ googleSheetName }})
+      <span aria-hidden="true">↗</span>
+    </a>
+  </div>
+
+  <div class="space-y-4" *ngIf="filteredMatches.length > 0; else noMatchesInRange">
+    <div *ngFor="let m of filteredMatches"
+      data-testid="match-card"
+      class="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition">
+
+      <div class="flex-1">
+        <!-- Date/Time -->
+        <div class="text-xs text-gray-500 mb-2 text-center">
+          {{ m.dateTime }}
+        </div>
+
+        <div class="flex items-center space-x-4">
+          <div class="flex-1 text-right">
+            <span class="font-semibold text-gray-800">{{ m.player1 }}</span>
+          </div>
+          <div class="flex items-center space-x-3">
+            <span class="text-2xl font-bold text-emerald-700">{{ m.score1 }}</span>
+            <span class="text-gray-400">-</span>
+            <span class="text-2xl font-bold text-emerald-700">{{ m.score2 }}</span>
+          </div>
+          <div class="flex-1">
+            <span class="font-semibold text-gray-800">{{ m.player2 }}</span>
+          </div>
+        </div>
+
+        <!-- Winner badge -->
+        <div class="text-center mt-2">
+          <span *ngIf="m.score1 > m.score2"
+            class="inline-block text-xs font-medium text-green-700 bg-green-100 px-3 py-1 rounded-full">
+            🏆 {{ m.player1 }} wins!
+          </span>
+          <span *ngIf="m.score2 > m.score1"
+            class="inline-block text-xs font-medium text-green-700 bg-green-100 px-3 py-1 rounded-full">
+            🏆 {{ m.player2 }} wins!
+          </span>
+          <span *ngIf="m.score1 === m.score2"
+            class="inline-block text-xs font-medium text-gray-700 bg-gray-200 px-3 py-1 rounded-full">
+            🤝 Tie
+          </span>
+        </div>
+      </div>
+
+      <button (click)="deleteMatch.emit(m)"
+        aria-label="Delete match"
+        data-testid="delete-match"
+        class="ml-4 text-red-500 hover:text-red-700 transition p-2 hover:bg-red-50 rounded-lg">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+          </path>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <details class="mt-6 border border-gray-100 rounded-lg px-4 py-3 bg-gray-50" *ngIf="matches.length > 0">
+    <summary class="cursor-pointer text-sm font-semibold text-gray-700" data-testid="raw-data-toggle">
+      Raw match data
+    </summary>
+    <p class="mt-2 text-xs text-gray-500">Shows all recorded matches, regardless of date filter.</p>
+    <div class="overflow-x-auto mt-4" data-testid="raw-data-table">
+      <table class="min-w-full text-sm">
+        <thead class="text-xs uppercase tracking-wide text-gray-500 border-b border-gray-200">
+          <tr>
+            <th class="py-2 text-left">Date</th>
+            <th class="py-2 text-left">Player 1</th>
+            <th class="py-2 text-right">Score 1</th>
+            <th class="py-2 text-left">Player 2</th>
+            <th class="py-2 text-right">Score 2</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let m of matches" class="border-b border-gray-200/60 last:border-0">
+            <td class="py-2 text-gray-600">{{ m.dateTime }}</td>
+            <td class="py-2 text-gray-800">{{ m.player1 }}</td>
+            <td class="py-2 text-right">{{ m.score1 }}</td>
+            <td class="py-2 text-gray-800">{{ m.player2 }}</td>
+            <td class="py-2 text-right">{{ m.score2 }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </details>
+
+  <ng-template #noMatchesInRange>
+    <div class="rounded-xl border border-dashed border-gray-200 p-6 text-center text-gray-500">
+      No matches in the selected date range.
+    </div>
+  </ng-template>
+</div>
+
+<ng-template #emptyState>
+  <div class="bg-white rounded-xl shadow-lg p-12 text-center" data-testid="empty-state">
+    <div class="text-6xl mb-4">🏓</div>
+    <h3 class="text-xl font-semibold text-gray-700 mb-2">No matches yet</h3>
+    <p class="text-gray-500">Record your first match above to get started!</p>
+  </div>
+</ng-template>

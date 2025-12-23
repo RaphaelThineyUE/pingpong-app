@@ -1,0 +1,225 @@
+.wizard-panel {
+  background: radial-gradient(circle at top, rgba(16, 185, 129, 0.15), rgba(255, 255, 255, 0.95)),
+    linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 40%, #ffffff 100%);
+  border-radius: 24px;
+  padding: 24px;
+  box-shadow: 0 20px 40px rgba(5, 150, 105, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+.wizard-panel::after {
+  content: '';
+  position: absolute;
+  inset: auto -60px -60px auto;
+  width: 160px;
+  height: 160px;
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.25), transparent 70%);
+  pointer-events: none;
+}
+
+.wizard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.wizard-kicker {
+  text-transform: uppercase;
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  color: #047857;
+  font-weight: 700;
+}
+
+.wizard-badge {
+  background: #10b981;
+  color: #ffffff;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.wizard-body {
+  display: grid;
+  gap: 16px;
+}
+
+.wizard-question {
+  font-size: 18px;
+  font-weight: 600;
+  color: #065f46;
+}
+
+.wizard-subtext {
+  font-size: 14px;
+  color: #047857;
+}
+
+.wizard-choice {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 16px;
+  border-radius: 16px;
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  background: #ffffff;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  text-align: left;
+}
+
+.wizard-choice:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(16, 185, 129, 0.15);
+}
+
+.wizard-choice.alt {
+  background: rgba(16, 185, 129, 0.08);
+}
+
+.wizard-choice.active {
+  border-color: #10b981;
+  box-shadow: 0 12px 24px rgba(16, 185, 129, 0.2);
+}
+
+.wizard-select {
+  background: #ffffff;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  border-radius: 10px;
+  padding: 4px 10px;
+  font-weight: 600;
+  color: #065f46;
+}
+
+.wizard-score {
+  border-radius: 999px;
+  padding: 6px 14px;
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  font-size: 13px;
+  font-weight: 600;
+  color: #065f46;
+  background: #ffffff;
+  transition: all 0.2s ease;
+}
+
+.wizard-score.active {
+  background: #10b981;
+  color: #ffffff;
+  border-color: #10b981;
+}
+
+.wizard-input {
+  flex: 1;
+  border-radius: 12px;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  padding: 10px 12px;
+  font-weight: 600;
+  color: #065f46;
+  background: #ffffff;
+}
+
+.wizard-primary {
+  background: #059669;
+  color: #ffffff;
+  padding: 10px 18px;
+  border-radius: 12px;
+  font-weight: 600;
+  transition: background 0.2s ease;
+}
+
+.wizard-primary:hover {
+  background: #047857;
+}
+
+.wizard-primary.small {
+  padding: 6px 12px;
+  font-size: 13px;
+  border-radius: 999px;
+}
+
+.wizard-link {
+  font-size: 14px;
+  color: #059669;
+  font-weight: 600;
+}
+
+.wizard-celebrate {
+  text-align: center;
+  display: grid;
+  gap: 12px;
+}
+
+.wizard-suggestion {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(16, 185, 129, 0.12);
+}
+
+.wizard-brag {
+  display: grid;
+  gap: 6px;
+  text-align: left;
+  background: rgba(16, 185, 129, 0.12);
+  border-radius: 16px;
+  padding: 12px 14px;
+}
+
+.wizard-brag ul {
+  list-style: disc;
+  padding-left: 18px;
+  color: #047857;
+  font-size: 13px;
+}
+
+.wizard-gif {
+  width: 100%;
+  border-radius: 18px;
+  max-height: 220px;
+  object-fit: cover;
+  border: 2px solid rgba(16, 185, 129, 0.2);
+}
+
+@media (max-width: 640px) {
+  .wizard-panel {
+    padding: 20px;
+    border-radius: 20px;
+  }
+
+  .wizard-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .wizard-question {
+    font-size: 20px;
+  }
+
+  .wizard-choice {
+    padding: 18px;
+    border-radius: 18px;
+  }
+
+  .wizard-score {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+
+  .wizard-input {
+    padding: 14px 14px;
+    font-size: 16px;
+  }
+
+  .wizard-primary {
+    padding: 14px 22px;
+    font-size: 16px;
+    border-radius: 16px;
+  }
+}
