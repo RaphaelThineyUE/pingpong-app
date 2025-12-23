@@ -1,29 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { GoogleSheetsService } from './google-sheets.service';
 import { PingPongLeaderboardService, LeaderboardResult, Match as LeaderboardMatch } from './stats-leaderboard';
-
-interface Match {
-  player1: string;
-  player2: string;
-  score1: number;
-  score2: number;
-  dateTime: string;
-  sheetRow?: number;
-}
-
-interface MatchForm {
-  player1: string;
-  player2: string;
-  score1: number | null;
-  score2: number | null;
-}
+import { environment } from '../environments/environment';
+import { Match, MatchForm } from './db/models/match.model';
+import { MatchFormComponent } from './components/match-form/match-form.component';
+import { LeaderboardStatusComponent } from './components/leaderboard-status/leaderboard-status.component';
+import { MatchHistoryComponent } from './components/match-history/match-history.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, MatchFormComponent, LeaderboardStatusComponent, MatchHistoryComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
@@ -48,7 +36,7 @@ export class AppComponent implements OnInit {
   constructor(
     private googleSheetsService: GoogleSheetsService,
     private leaderboardService: PingPongLeaderboardService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.loadMatches();
@@ -186,6 +174,28 @@ export class AppComponent implements OnInit {
 
   get filteredMatches(): Match[] {
     return this.filterMatchesByDate(this.matches);
+  }
+
+  get googleSheetUrl(): string {
+    const spreadsheetId = environment.googleSheets.spreadsheetId;
+    if (!spreadsheetId) {
+      return '';
+    }
+    return `https://docs.google.com/spreadsheets/d/${spreadsheetId}`;
+  }
+
+  get googleSheetName(): string {
+    return environment.googleSheets.sheetName || 'Sheet1';
+  }
+
+  onStartDateChange(value: string) {
+    this.startDate = value;
+    this.updateLeaderboard();
+  }
+
+  onEndDateChange(value: string) {
+    this.endDate = value;
+    this.updateLeaderboard();
   }
 
   private filterMatchesByDate(matches: Match[]): Match[] {

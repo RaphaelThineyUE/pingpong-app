@@ -1,0 +1,95 @@
+<div class="bg-white rounded-xl shadow-lg p-6 mb-8" data-testid="leaderboard-status">
+  <div class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between mb-6">
+    <div>
+      <h2 class="text-2xl font-semibold text-gray-800">Leaderboard</h2>
+      <p class="text-sm text-gray-500">Matches in range: {{ matchCount }}</p>
+    </div>
+    <div class="flex items-center gap-2 text-xs text-gray-500">
+      <span class="inline-flex items-center gap-1">
+        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+        Live updates
+      </span>
+    </div>
+  </div>
+
+  <div class="grid gap-4 md:grid-cols-2 mb-6">
+    <div>
+      <label for="startDate" class="block text-xs font-semibold uppercase tracking-wide text-gray-500 mb-2">
+        From
+      </label>
+      <input id="startDate" type="date" [(ngModel)]="startDate" name="startDate"
+        (ngModelChange)="onStartDateChange($event)"
+        class="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-emerald-400 focus:ring-2 focus:ring-emerald-200 transition">
+    </div>
+    <div>
+      <label for="endDate" class="block text-xs font-semibold uppercase tracking-wide text-gray-500 mb-2">
+        To
+      </label>
+      <input id="endDate" type="date" [(ngModel)]="endDate" name="endDate"
+        (ngModelChange)="onEndDateChange($event)"
+        class="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-emerald-400 focus:ring-2 focus:ring-emerald-200 transition">
+    </div>
+  </div>
+
+  <ng-container *ngIf="leaderboard; else leaderboardEmpty">
+    <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-6">
+      <div class="rounded-xl border border-emerald-100 bg-emerald-50 p-4">
+        <p class="text-xs font-semibold uppercase tracking-wide text-emerald-700">Elo Champion</p>
+        <p class="text-lg font-semibold text-emerald-900 mt-2">{{ leaderboard.titles.eloChampion }}</p>
+      </div>
+      <div class="rounded-xl border border-emerald-100 bg-emerald-50 p-4">
+        <p class="text-xs font-semibold uppercase tracking-wide text-emerald-700">Win % Champion</p>
+        <p class="text-lg font-semibold text-emerald-900 mt-2">{{ leaderboard.titles.winPctChampion }}</p>
+      </div>
+      <div class="rounded-xl border border-emerald-100 bg-emerald-50 p-4">
+        <p class="text-xs font-semibold uppercase tracking-wide text-emerald-700">Most Wins</p>
+        <p class="text-lg font-semibold text-emerald-900 mt-2">{{ leaderboard.titles.mostWins }}</p>
+      </div>
+      <div class="rounded-xl border border-emerald-100 bg-emerald-50 p-4">
+        <p class="text-xs font-semibold uppercase tracking-wide text-emerald-700">Most Games</p>
+        <p class="text-lg font-semibold text-emerald-900 mt-2">{{ leaderboard.titles.mostGames }}</p>
+      </div>
+    </div>
+
+    <div class="overflow-x-auto">
+      <table class="min-w-full text-sm">
+        <thead class="text-xs uppercase tracking-wide text-gray-500 border-b border-gray-200">
+          <tr>
+            <th class="py-2 text-left">Rank</th>
+            <th class="py-2 text-left">Player</th>
+            <th class="py-2 text-right">Wins</th>
+            <th class="py-2 text-right">Games</th>
+            <th class="py-2 text-right">Win %</th>
+            <th class="py-2 text-right">Elo</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let player of leaderboard.players; let i = index" class="border-b border-gray-100 last:border-0">
+            <td class="py-2 font-semibold text-gray-700">{{ i + 1 }}</td>
+            <td class="py-2 text-gray-800">{{ player.name }}</td>
+            <td class="py-2 text-right">{{ player.wins }}</td>
+            <td class="py-2 text-right">{{ player.games }}</td>
+            <td class="py-2 text-right">{{ player.winPct }}%</td>
+            <td class="py-2 text-right font-semibold text-emerald-700">{{ player.elo }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="text-xs text-gray-500 mt-4">
+      Statistically relevant (10+ games):
+      <span class="font-medium text-gray-700" *ngIf="leaderboard.titles.statisticallyRelevant.length > 0">
+        {{ leaderboard.titles.statisticallyRelevant.join(', ') }}
+      </span>
+      <span class="font-medium text-gray-700" *ngIf="leaderboard.titles.statisticallyRelevant.length === 0">
+        None
+      </span>
+    </p>
+  </ng-container>
+
+  <ng-template #leaderboardEmpty>
+    <div class="rounded-xl border border-dashed border-gray-200 p-6 text-center text-gray-500">
+      Add matches to see leaderboard stats for the selected dates.
+    </div>
+  </ng-template>
+</div>

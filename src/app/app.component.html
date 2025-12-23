@@ -17,240 +17,30 @@
   <!-- Main Content -->
   <main class="max-w-4xl mx-auto px-4 py-8">
 
-    <!-- Match Entry Form -->
-    <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
-      <h2 class="text-2xl font-semibold text-gray-800 mb-6">New Match</h2>
+    <app-match-form
+      [players]="players"
+      [match]="match"
+      [availablePlayers2]="availablePlayers2"
+      [submitting]="submitting"
+      (matchSubmit)="submitMatch()">
+    </app-match-form>
 
-      <form (ngSubmit)="submitMatch()" class="space-y-6">
+    <app-leaderboard-status
+      [leaderboard]="leaderboard"
+      [startDate]="startDate"
+      [endDate]="endDate"
+      [matchCount]="leaderboardMatchCount"
+      (startDateChange)="onStartDateChange($event)"
+      (endDateChange)="onEndDateChange($event)">
+    </app-leaderboard-status>
 
-        <!-- Player Selection -->
-        <div class="grid md:grid-cols-2 gap-6">
-
-          <!-- Player 1 -->
-          <div>
-            <label for="player1" class="block text-sm font-medium text-gray-700 mb-2">
-              Player 1
-            </label>
-            <select id="player1" [(ngModel)]="match.player1" name="player1" required
-              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
-              <option value="">Select Player 1</option>
-              <option *ngFor="let player of players" [value]="player">{{ player }}</option>
-            </select>
-          </div>
-
-          <!-- Player 2 -->
-          <div>
-            <label for="player2" class="block text-sm font-medium text-gray-700 mb-2">
-              Player 2
-            </label>
-            <select id="player2" [(ngModel)]="match.player2" name="player2" required [disabled]="!match.player1"
-              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition disabled:bg-gray-100 disabled:cursor-not-allowed">
-              <option value="">Select Player 2</option>
-              <option *ngFor="let player of availablePlayers2" [value]="player">{{ player }}</option>
-            </select>
-          </div>
-        </div>
-
-        <!-- Score Entry -->
-        <div class="grid md:grid-cols-2 gap-6">
-
-          <!-- Score 1 -->
-          <div>
-            <label for="score1" class="block text-sm font-medium text-gray-700 mb-2">
-              {{ match.player1 || 'Player 1' }}'s Score
-            </label>
-            <input id="score1" type="number" [(ngModel)]="match.score1" name="score1" required min="0"
-              placeholder="Enter score"
-              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition text-lg font-semibold">
-          </div>
-
-          <!-- Score 2 -->
-          <div>
-            <label for="score2" class="block text-sm font-medium text-gray-700 mb-2">
-              {{ match.player2 || 'Player 2' }}'s Score
-            </label>
-            <input id="score2" type="number" [(ngModel)]="match.score2" name="score2" required min="0"
-              placeholder="Enter score"
-              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition text-lg font-semibold">
-          </div>
-        </div>
-
-        <!-- Submit Button -->
-        <button type="submit"
-          [disabled]="!match.player1 || !match.player2 || match.score1 === null || match.score2 === null"
-          class="w-full bg-emerald-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-emerald-700 transition disabled:bg-gray-300 disabled:cursor-not-allowed shadow-md hover:shadow-lg">
-          Record Match
-        </button>
-      </form>
-    </div>
-
-    <!-- Leaderboard -->
-    <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
-      <div class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between mb-6">
-        <div>
-          <h2 class="text-2xl font-semibold text-gray-800">Leaderboard</h2>
-          <p class="text-sm text-gray-500">Matches in range: {{ leaderboardMatchCount }}</p>
-        </div>
-        <div class="flex items-center gap-2 text-xs text-gray-500">
-          <span class="inline-flex items-center gap-1">
-            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-            Live updates
-          </span>
-        </div>
-      </div>
-
-      <div class="grid gap-4 md:grid-cols-2 mb-6">
-        <div>
-          <label for="startDate" class="block text-xs font-semibold uppercase tracking-wide text-gray-500 mb-2">
-            From
-          </label>
-          <input id="startDate" type="date" [(ngModel)]="startDate" name="startDate" (ngModelChange)="updateLeaderboard()"
-            class="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-emerald-400 focus:ring-2 focus:ring-emerald-200 transition">
-        </div>
-        <div>
-          <label for="endDate" class="block text-xs font-semibold uppercase tracking-wide text-gray-500 mb-2">
-            To
-          </label>
-          <input id="endDate" type="date" [(ngModel)]="endDate" name="endDate" (ngModelChange)="updateLeaderboard()"
-            class="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-emerald-400 focus:ring-2 focus:ring-emerald-200 transition">
-        </div>
-      </div>
-
-      <ng-container *ngIf="leaderboard; else leaderboardEmpty">
-        <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-6">
-          <div class="rounded-xl border border-emerald-100 bg-emerald-50 p-4">
-            <p class="text-xs font-semibold uppercase tracking-wide text-emerald-700">Elo Champion</p>
-            <p class="text-lg font-semibold text-emerald-900 mt-2">{{ leaderboard.titles.eloChampion }}</p>
-          </div>
-          <div class="rounded-xl border border-emerald-100 bg-emerald-50 p-4">
-            <p class="text-xs font-semibold uppercase tracking-wide text-emerald-700">Win % Champion</p>
-            <p class="text-lg font-semibold text-emerald-900 mt-2">{{ leaderboard.titles.winPctChampion }}</p>
-          </div>
-          <div class="rounded-xl border border-emerald-100 bg-emerald-50 p-4">
-            <p class="text-xs font-semibold uppercase tracking-wide text-emerald-700">Most Wins</p>
-            <p class="text-lg font-semibold text-emerald-900 mt-2">{{ leaderboard.titles.mostWins }}</p>
-          </div>
-          <div class="rounded-xl border border-emerald-100 bg-emerald-50 p-4">
-            <p class="text-xs font-semibold uppercase tracking-wide text-emerald-700">Most Games</p>
-            <p class="text-lg font-semibold text-emerald-900 mt-2">{{ leaderboard.titles.mostGames }}</p>
-          </div>
-        </div>
-
-        <div class="overflow-x-auto">
-          <table class="min-w-full text-sm">
-            <thead class="text-xs uppercase tracking-wide text-gray-500 border-b border-gray-200">
-              <tr>
-                <th class="py-2 text-left">Rank</th>
-                <th class="py-2 text-left">Player</th>
-                <th class="py-2 text-right">Wins</th>
-                <th class="py-2 text-right">Games</th>
-                <th class="py-2 text-right">Win %</th>
-                <th class="py-2 text-right">Elo</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let player of leaderboard.players; let i = index" class="border-b border-gray-100 last:border-0">
-                <td class="py-2 font-semibold text-gray-700">{{ i + 1 }}</td>
-                <td class="py-2 text-gray-800">{{ player.name }}</td>
-                <td class="py-2 text-right">{{ player.wins }}</td>
-                <td class="py-2 text-right">{{ player.games }}</td>
-                <td class="py-2 text-right">{{ player.winPct }}%</td>
-                <td class="py-2 text-right font-semibold text-emerald-700">{{ player.elo }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <p class="text-xs text-gray-500 mt-4">
-          Statistically relevant (10+ games):
-          <span class="font-medium text-gray-700" *ngIf="leaderboard.titles.statisticallyRelevant.length > 0">
-            {{ leaderboard.titles.statisticallyRelevant.join(', ') }}
-          </span>
-          <span class="font-medium text-gray-700" *ngIf="leaderboard.titles.statisticallyRelevant.length === 0">
-            None
-          </span>
-        </p>
-      </ng-container>
-
-      <ng-template #leaderboardEmpty>
-        <div class="rounded-xl border border-dashed border-gray-200 p-6 text-center text-gray-500">
-          Add matches to see leaderboard stats for the selected dates.
-        </div>
-      </ng-template>
-    </div>
-
-    <!-- Recent Matches -->
-    <div class="bg-white rounded-xl shadow-lg p-6" *ngIf="matches.length > 0">
-      <div class="flex items-center justify-between mb-6">
-        <h2 class="text-2xl font-semibold text-gray-800">Recent Matches</h2>
-        <span class="text-sm text-gray-500">Showing {{ filteredMatches.length }} of {{ matches.length }}</span>
-      </div>
-
-      <div class="space-y-4" *ngIf="filteredMatches.length > 0; else noMatchesInRange">
-        <div *ngFor="let m of filteredMatches"
-          class="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition">
-
-          <div class="flex-1">
-            <!-- Date/Time -->
-            <div class="text-xs text-gray-500 mb-2 text-center">
-              {{ m.dateTime }}
-            </div>
-
-            <div class="flex items-center space-x-4">
-              <div class="flex-1 text-right">
-                <span class="font-semibold text-gray-800">{{ m.player1 }}</span>
-              </div>
-              <div class="flex items-center space-x-3">
-                <span class="text-2xl font-bold text-emerald-700">{{ m.score1 }}</span>
-                <span class="text-gray-400">-</span>
-                <span class="text-2xl font-bold text-emerald-700">{{ m.score2 }}</span>
-              </div>
-              <div class="flex-1">
-                <span class="font-semibold text-gray-800">{{ m.player2 }}</span>
-              </div>
-            </div>
-
-            <!-- Winner badge -->
-            <div class="text-center mt-2">
-              <span *ngIf="m.score1 > m.score2"
-                class="inline-block text-xs font-medium text-green-700 bg-green-100 px-3 py-1 rounded-full">
-                🏆 {{ m.player1 }} wins!
-              </span>
-              <span *ngIf="m.score2 > m.score1"
-                class="inline-block text-xs font-medium text-green-700 bg-green-100 px-3 py-1 rounded-full">
-                🏆 {{ m.player2 }} wins!
-              </span>
-              <span *ngIf="m.score1 === m.score2"
-                class="inline-block text-xs font-medium text-gray-700 bg-gray-200 px-3 py-1 rounded-full">
-                🤝 Tie
-              </span>
-            </div>
-          </div>
-
-          <button (click)="deleteMatch(m)"
-            class="ml-4 text-red-500 hover:text-red-700 transition p-2 hover:bg-red-50 rounded-lg">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
-              </path>
-            </svg>
-          </button>
-        </div>
-      </div>
-
-      <ng-template #noMatchesInRange>
-        <div class="rounded-xl border border-dashed border-gray-200 p-6 text-center text-gray-500">
-          No matches in the selected date range.
-        </div>
-      </ng-template>
-    </div>
-
-    <!-- Empty State -->
-    <div *ngIf="matches.length === 0" class="bg-white rounded-xl shadow-lg p-12 text-center">
-      <div class="text-6xl mb-4">🏓</div>
-      <h3 class="text-xl font-semibold text-gray-700 mb-2">No matches yet</h3>
-      <p class="text-gray-500">Record your first match above to get started!</p>
-    </div>
+    <app-match-history
+      [matches]="matches"
+      [filteredMatches]="filteredMatches"
+      [googleSheetUrl]="googleSheetUrl"
+      [googleSheetName]="googleSheetName"
+      (deleteMatch)="deleteMatch($event)">
+    </app-match-history>
 
   </main>
 
